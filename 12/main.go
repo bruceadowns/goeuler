@@ -27,9 +27,13 @@ What is the value of the first triangle number to have over five hundred divisor
 
 func divisors(i int) (res int) {
 	res = 2
-	for j := 1; j <= i/2; j++ {
+	for j := 2; j*j <= i; j++ {
 		if i%j == 0 {
-			res++
+			if j*j == res {
+				res++
+			} else {
+				res += 2
+			}
 		}
 	}
 
@@ -39,16 +43,10 @@ func divisors(i int) (res int) {
 func main() {
 	const divisorCount = 500
 
-	var max int
 	var sum int
 	for i := 1; ; i++ {
-		d := divisors(sum)
-		if d > divisorCount {
+		if divisors(sum) > divisorCount {
 			break
-		}
-		if max < d {
-			max = d
-			log.Printf("sum: %d tnum: %d divisors: %d", sum, i, d)
 		}
 
 		sum += i
