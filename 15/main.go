@@ -16,23 +16,24 @@ type coord struct {
 	x, y int
 }
 
-var cache = make(map[coord]int64)
+var cache = make(map[coord]int)
 
-func routes(a coord) int64 {
-	if a.x == 0 || a.y == 0 {
+func routes(x, y int) int {
+	if x == 0 || y == 0 {
 		return 1
 	}
 
-	if n, ok := cache[a]; ok {
+	c := coord{x, y}
+	if n, ok := cache[c]; ok {
 		return n
 	}
 
-	r := routes(coord{a.x - 1, a.y}) + routes(coord{a.x, a.y - 1})
-	cache[a] = r
+	r := routes(x-1, y) + routes(x, y-1)
+	cache[c] = r
 	return r
 }
 
 func main() {
-	count := routes(coord{20, 20})
+	count := routes(20, 20)
 	log.Printf("There are %d routes through a 20x20 grid.", count)
 }
