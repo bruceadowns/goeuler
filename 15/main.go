@@ -1,9 +1,6 @@
 package main
 
-import (
-	"log"
-	"time"
-)
+import "log"
 
 /*
 https://projecteuler.net/problem=15
@@ -19,46 +16,23 @@ type coord struct {
 	x, y int
 }
 
-var size = coord{20, 20}
-
 var cache = make(map[coord]int64)
 
-func routes(a coord) (res int64) {
-	if a == size {
+func routes(a coord) int64 {
+	if a.x == 0 || a.y == 0 {
 		return 1
 	}
 
-	if a.x < size.x {
-		next := coord{a.x + 1, a.y}
-		if n, ok := cache[next]; ok {
-			res += n
-		} else {
-			subRoutes := routes(next)
-			cache[next] = subRoutes
-			res += subRoutes
-		}
+	if n, ok := cache[a]; ok {
+		return n
 	}
 
-	if a.y < size.y {
-		next := coord{a.x, a.y + 1}
-		if n, ok := cache[next]; ok {
-			res += n
-		} else {
-			subRoutes := routes(next)
-			cache[next] = subRoutes
-			res += subRoutes
-		}
-	}
-
-	return
+	r := routes(coord{a.x - 1, a.y}) + routes(coord{a.x, a.y - 1})
+	cache[a] = r
+	return r
 }
 
 func main() {
-	startingTime := time.Now().UnixNano()
-	count := routes(coord{0, 0})
-	dur := (time.Now().UnixNano() - startingTime) / 1000000
-
-	log.Printf(
-		"There are %d routes through a %dx%d grid. [duration: %dms]",
-		count, size.x, size.y, dur)
+	count := routes(coord{20, 20})
+	log.Printf("There are %d routes through a 20x20 grid.", count)
 }
