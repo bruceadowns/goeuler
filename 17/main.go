@@ -14,42 +14,102 @@ were written out in words,
 how many letters would be used?
 */
 
+func written(i int) (res string) {
+	switch {
+	case i == 0:
+	case i == 1:
+		res = "one"
+	case i == 2:
+		res = "two"
+	case i == 3:
+		res = "three"
+	case i == 4:
+		res = "four"
+	case i == 5:
+		res = "five"
+	case i == 6:
+		res = "six"
+	case i == 7:
+		res = "seven"
+	case i == 8:
+		res = "eight"
+	case i == 9:
+		res = "nine"
+	case i == 10:
+		res = "ten"
+	case i == 11:
+		res = "eleven"
+	case i == 12:
+		res = "twelve"
+	case i == 13:
+		res = "thirteen"
+	case i == 14:
+		res = "fourteen"
+	case i == 15:
+		res = "fifteen"
+	case i == 16:
+		res = "sixteen"
+	case i == 17:
+		res = "seventeen"
+	case i == 18:
+		res = "eighteen"
+	case i == 19:
+		res = "nineteen"
+	case i == 20:
+		res = "twenty"
+	case i == 30:
+		res = "thirty"
+	case i == 40:
+		res = "forty"
+	case i == 50:
+		res = "fifty"
+	case i == 60:
+		res = "sixty"
+	case i == 70:
+		res = "seventy"
+	case i == 80:
+		res = "eighty"
+	case i == 90:
+		res = "ninety"
+	case i == 1000:
+		res = "one thousand"
+	case i/1000000 >= 1:
+		res = written(i/1000000) + " million " + written(i%1000000)
+	case i/1000 >= 1:
+		res = written(i/1000) + " thousand " + written(i%1000)
+	case i/100 >= 1 && i%100 == 0:
+		res = written(i/100) + " hundred"
+	case i/100 >= 1 && i%100 != 0:
+		res = written(i/100) + " hundred and " + written(i%100)
+	case i/10 >= 1 && i%10 > 0:
+		res = written(i-i%10) + "-" + written(i%10)
+	}
+
+	return
+}
+
 func main() {
-	ones := len("onetwothreefourfivesixseveneightnine")
-	log.Printf("ones: %d", ones)
+	const count = 1000
 
-	teens := len("teneleventwelvethirteenfourteenfifteensixteenseventeeneighteennineteen")
-	log.Printf("teens: %d", teens)
+	words := make([]string, 0)
+	for i := 1; i <= count; i++ {
+		words = append(words, written(i))
+	}
+	//for _, v := range words {
+	//	log.Print(v)
+	//}
 
-	tens := len("twenty")*10 + ones
-	tens += len("thirty")*10 + ones
-	tens += len("forty")*10 + ones
-	tens += len("fifty")*10 + ones
-	tens += len("sixty")*10 + ones
-	tens += len("seventy")*10 + ones
-	tens += len("eighty")*10 + ones
-	tens += len("ninety")*10 + ones
-	log.Printf("tens: %d", tens)
+	var sum int
+	for _, v := range words {
+		for _, w := range v {
+			switch w {
+			case ' ':
+			case '-':
+			default:
+				sum++
+			}
+		}
+	}
 
-	totalones := ones * 100
-	log.Printf("totalones: %d", totalones)
-
-	under100 := ones + teens + tens
-	log.Printf("under100: %d", under100)
-
-	totalunder100 := under100 * 9
-	log.Printf("totalunder100: %d", totalunder100)
-
-	hundred := 9 * len("hundred")
-	log.Printf("hundred: %d", hundred)
-
-	hundredand := len("hundredand") * 891
-	log.Printf("hundredand: %d", hundredand)
-
-	thousands := len("onethousand")
-	log.Printf("thousands: %d", thousands)
-
-	sum := under100 + totalones + totalunder100 + hundred + hundredand + thousands
-
-	log.Printf("There are %d letters used.", sum)
+	log.Printf("There are %d letters used for numbers 1 through %d.", sum, count)
 }
