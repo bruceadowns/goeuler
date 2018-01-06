@@ -3,8 +3,6 @@ package main
 import (
 	"bytes"
 	"log"
-
-	"github.com/bruceadowns/goitertools/itertools"
 )
 
 /*
@@ -21,11 +19,48 @@ The lexicographic permutations of 0, 1 and 2 are:
 What is the millionth lexicographic permutation of the digits 0, 1, 2, 3, 4, 5, 6, 7, 8 and 9?
 */
 
+// adaptation of SEPA Algorithm
+func permute(iterable []int) bool {
+	l := len(iterable)
+	key := l - 1
+	newkey := l - 1
+
+	for (key > 0) && (iterable[key] <= iterable[key-1]) {
+		key--
+	}
+
+	key--
+
+	if key < 0 {
+		return false
+	}
+
+	for (newkey > key) && (iterable[newkey] <= iterable[key]) {
+		newkey--
+	}
+
+	iterable[key], iterable[newkey] = iterable[newkey], iterable[key]
+
+	l--
+	key++
+
+	for l > key {
+		iterable[l], iterable[key] = iterable[key], iterable[l]
+		key++
+		l--
+	}
+
+	return true
+}
+
 func main() {
-	p := itertools.Permutations([]int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}, 10)
+	iterable := []int{0, 1, 2, 3, 4, 5, 6, 7, 8, 9}
+	for i := 0; i < 999999; i++ {
+		permute(iterable)
+	}
 
 	sb := bytes.Buffer{}
-	for _, v := range p[999999] {
+	for _, v := range iterable {
 		sb.WriteRune('0' + rune(v))
 	}
 
